@@ -308,19 +308,7 @@ class CBS(object):
         return plan
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("param", help="input file containing map and obstacles")
-    parser.add_argument("output", help="output file with the schedule")
-    args = parser.parse_args()
-
-    # Read from input file
-    with open(args.param, 'r') as param_file:
-        try:
-            param = yaml.load(param_file, Loader=yaml.FullLoader)
-        except yaml.YAMLError as exc:
-            print(exc)
-
+def solve(param):
     dimension = param["map"]["dimensions"]
     obstacles = param["map"]["obstacles"]
     agents = param['agents']
@@ -332,7 +320,26 @@ def main():
     solution = cbs.search()
     if not solution:
         print(" Solution not found" )
-        return
+        return None
+
+    return solution, env
+    
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("param", help="input file containing map and obstacles")
+    parser.add_argument("output", help="output file with the schedule")
+    args = parser.parse_args()
+
+    # Read from input file
+    with open(args.param, 'r') as param_file:
+        try:
+            param = yaml.load(param_file, Loader=yaml.FullLoader)
+        except yaml.YAMLError as exc:
+            print(exc)
+    
+    solution, env = solve(param)
 
     # Write to output file
     with open(args.output, 'r') as output_yaml:
@@ -346,6 +353,3 @@ def main():
     with open(args.output, 'w') as output_yaml:
         yaml.safe_dump(output, output_yaml)
 
-
-if __name__ == "__main__":
-    main()
