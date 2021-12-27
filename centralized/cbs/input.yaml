@@ -9,7 +9,8 @@ map:
     dimensions: [3, 3]
     obstacles:
     - !!python/tuple [0, 1]
-    - !!python/tuple [2, 1]agents:
+    - !!python/tuple [2, 1]
+agents:
 -   start: [0, 4]
     goal: [3, 5]
     name: agent0
